@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const program = require('commander');
 const inquirer = require('inquirer');
 const axios = require('axios');
@@ -39,7 +41,7 @@ program
 program.parse(process.argv);
 
 function getAuthPrompts(callback) {
-    var questions = [
+    return questions = [
         {
             name: 'username',
             type: 'input',
@@ -69,11 +71,9 @@ function getAuthPrompts(callback) {
 
 function fetchAuthToken(username, password) {
     api.post('/users/auth-token', {
-        params: {
-            'app': 3,
-            'username': username,
-            'password': password
-        }
+        'app': 3,
+        'username': username,
+        'password': password
     }).then(response => {
         prefs.auth_token = response.data.auth_token;
     }).catch(error => {
