@@ -1,13 +1,27 @@
 {
   "name": "devrant-cli",
   "version": "0.0.2",
-  "description": "Interact with devRant using CLI!",
+  "description": "Interact with devRant right from your terminal!",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "sudosaket",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sudosaket/devrant-cli.git"
+  },
+  "keywords": [
+    "devrant",
+    "api",
+    "cli",
+    "public"
+  ],
+  "author": "Saket Mehta",
   "license": "MIT",
+  "homepage": "https://github.com/sudosaket/devrant-cli#readme",
+  "bugs": {
+    "url": "https://github.com/sudosaket/devrant-cli/issues"
+  },
   "dependencies": {
     "axios": "^0.17.1",
     "commander": "^2.12.2",
@@ -16,7 +30,7 @@
     "qs": "^6.5.1"
   },
   "bin": {
-    "devrant-cli": "./index.js"
+    "devrant": "./index.js"
   },
   "preferGlobal": true
 }
