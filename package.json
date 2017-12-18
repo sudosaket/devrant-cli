@@ -1,0 +1,17 @@
+{
+  "name": "devrant-cli",
+  "version": "0.0.1",
+  "description": "Interact with devRant using CLI!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "puppypower",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "commander": "^2.12.2",
+    "inquirer": "^4.0.1",
+    "preferences": "^1.0.2"
+  }
+}
