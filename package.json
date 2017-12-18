@@ -12,6 +12,7 @@
     "axios": "^0.17.1",
     "commander": "^2.12.2",
     "inquirer": "^4.0.1",
-    "preferences": "^1.0.2"
+    "preferences": "^1.0.2",
+    "qs": "^6.5.1"
   }
 }

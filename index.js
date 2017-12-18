@@ -1,11 +1,12 @@
-var program = require('commander');
-var inquirer = require('inquirer');
+const program = require('commander');
+const inquirer = require('inquirer');
 const axios = require('axios');
-var Preferences = require("preferences");
+const qs = require('qs');
+const Preferences = require("preferences");
 
-var prefs = new Preferences("devrant-cli");
+const prefs = new Preferences("devrant-cli");
 const api = axios.create({
-    baseURL: 'https://www.devrant.io/api'
+    baseURL: 'https://devrant.com/api'
 });
 
 program.version('0.0.1');
@@ -14,9 +15,10 @@ program
     .command('login')
     .description('authenticate yourself')
     .action(function (opts) {
-        getDevRantCredentials(function () {
+        var questions = getAuthPrompts();
+        inquirer.prompt(questions).then(function () {
             var creds = arguments[0];
-            getDevRantToken(creds.username, creds.password);
+            fetchAuthToken(creds.username, creds.password);
         });
     });
 
@@ -24,19 +26,19 @@ program
     .command('notifs')
     .description('your notifications')
     .action(function (opts) {
-        console.log('will list your notifications...')
+        fetchNotifs();
     });
 
 program
-    .command('post <text>')
+    .command('post')
     .description('post a rant')
-    .action(function (text, opts) {
-        console.log(`will post the following text: ${text}`);
+    .action(function (opts) {
+        console.log("will ask you for text and post it...");
     });
 
 program.parse(process.argv);
 
-function getDevRantCredentials(callback) {
+function getAuthPrompts(callback) {
     var questions = [
         {
             name: 'username',
@@ -63,17 +65,32 @@ function getDevRantCredentials(callback) {
             }
         }
     ];
-
-    inquirer.prompt(questions).then(callback);
 }
 
-function getDevRantToken(username, password) {
-    api.post('users/auth-token', {
-        'app': 3,
-        'username': username,
-        'password': password,
+function fetchAuthToken(username, password) {
+    api.post('/users/auth-token', {
+        params: {
+            'app': 3,
+            'username': username,
+            'password': password
+        }
     }).then(response => {
         prefs.auth_token = response.data.auth_token;
+    }).catch(error => {
+        plog(error.response.data);
+    });
+}
+
+function fetchNotifs() {
+    api.get('/users/me/notif-feed', {
+        params: {
+            'app': 3,
+            'token_id': prefs.auth_token.id,
+            'token_key': prefs.auth_token.key,
+            'user_id': prefs.auth_token.user_id
+        }
+    }).then(response => {
+        plog(response.data.data.unread);
     }).catch(error => {
         plog(error.response.data);
     });
@@ -82,5 +99,3 @@ function getDevRantToken(username, password) {
 function plog(object) {
     console.log(JSON.stringify(object, null, 2));
 }
-
-plog(prefs);
