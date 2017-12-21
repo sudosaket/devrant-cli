@@ -1,27 +1,24 @@
 #!/usr/bin/env node
 
+import { questions } from './login';
+
 const program = require('commander');
 const inquirer = require('inquirer');
-const axios = require('axios');
-const qs = require('qs');
 const Preferences = require("preferences");
+const axios = require('axios');
 
 const prefs = new Preferences("devrant-cli");
 const api = axios.create({
     baseURL: 'https://devrant.com/api'
 });
 
-program.version('0.0.1');
+program.version('0.0.2');
 
 program
     .command('login')
     .description('authenticate yourself')
     .action(function (opts) {
-        var questions = getAuthPrompts();
-        inquirer.prompt(questions).then(function () {
-            var creds = arguments[0];
-            fetchAuthToken(creds.username, creds.password);
-        });
+        login(opts);
     });
 
 program
@@ -40,33 +37,11 @@ program
 
 program.parse(process.argv);
 
-function getAuthPrompts(callback) {
-    return questions = [
-        {
-            name: 'username',
-            type: 'input',
-            message: 'Enter your devRant username or email address:',
-            validate: function (value) {
-                if (value.length) {
-                    return true;
-                } else {
-                    return 'Please enter your devRant username or email address';
-                }
-            }
-        },
-        {
-            name: 'password',
-            type: 'password',
-            message: 'Enter your password:',
-            validate: function (value) {
-                if (value.length) {
-                    return true;
-                } else {
-                    return 'Please enter your password';
-                }
-            }
-        }
-    ];
+function login(opts) {
+    inquirer.prompt(questions).then(function () {
+        var creds = arguments[0];
+        fetchAuthToken(creds.username, creds.password);
+    });
 }
 
 function fetchAuthToken(username, password) {

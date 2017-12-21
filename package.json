@@ -2,8 +2,10 @@
   "name": "devrant-cli",
   "version": "0.0.2",
   "description": "Interact with devRant right from your terminal!",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
+    "compile": "babel src -d lib",
+    "prepublish": "npm run compile",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -30,7 +32,11 @@
     "qs": "^6.5.1"
   },
   "bin": {
-    "devrant": "./index.js"
+    "devrant": "./lib/index.js"
   },
-  "preferGlobal": true
+  "preferGlobal": true,
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1"
+  }
 }
